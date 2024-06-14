@@ -36,7 +36,7 @@ class MonteCarloTest(unittest.TestCase):
 
     def test_rtp(self):  
         """
-            Use monte carlo simulation to assert RTP over time to 85% with a maximum of 10% of variance
+            Use monte carlo simulation to assert RTP over time to 92% with a maximum of 5% of variance
         """
         total = 0
         rtp = 0
