@@ -1,3 +1,4 @@
+import os
 import time
 import curses
 
@@ -32,6 +33,7 @@ class Repl(object):
 
 
     def bootstrap(self):
+        os.system(f'printf "\\e[8;{36};{100}t"')  # Terminal Size
         self.scr.keypad(True)
         curses.curs_set(0)  # Hide the cursor
         curses.mousemask(-1)
