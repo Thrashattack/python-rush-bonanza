@@ -6,7 +6,20 @@ https://github.com/Thrashattack/python-rush-bonanza/assets/23486776/5f0da42d-11e
 
 
 
-
-
-
 ## Slots casino game with a Shell and Web interface 
+
+### Install dependencies 
+
+> pip3 install -r requirements.txt --break-system-packages
+
+### Run Shell (Terminal) Version
+
+- Access the project root directory
+
+> python3 . --stdio
+
+### Run Web (Fastapi) Version
+
+- Access the project root directory
+
+> fastapi dev|run __main__.py -d --http
