@@ -53,14 +53,14 @@ class Slots(object):
     def fill_table(self, only_empty=False):
         """
             Fill the table tiles with symbols.
-            When only_empty is settled, only fills empty (WIN_SYMBOL) tiles
+            When only_empty is settled, only fills empty tiles
             For each tile, it will check if it will be a Scatter symbol by calling is_scatter()
             When it's not a Scatter, it will check if it will be the chosen lucky symbol by calling is_lucky()
         """
         lucky_symbol = self.odds[randrange(len(self.odds))]
         for i in range(self.size):
             for j in range(self.size):
-                if only_empty and self.table[j][i] != self.WIN_SYMBOL:
+                if only_empty and self.table[j][i] != self.EMPTY_SYMBOL:
                     continue
                 elif self.is_scatter():
                     self.table[j][i] = self.SCATTER_SYMBOL
