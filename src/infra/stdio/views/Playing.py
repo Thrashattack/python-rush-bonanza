@@ -51,7 +51,7 @@ class Playing(object):
               4, 0, f'Press CTRL+C to Stop')
           self.scr.refresh()
 
-          playsound(self.ROLLING_SOUND, False)
+          self.play_sound(sound_file=self.ROLLING_SOUND, sync=False)
           for update in self.game.play():
             match update['action']:
               case 'fill_table' | 'find_clusters_and_update':
@@ -90,11 +90,11 @@ class Playing(object):
             self.sleep(additional=-0.4)
             curses.flash()
         self.scr.refresh()
-        self.sleep()
+        self.sleep(additional=0.5)
       
       
     def tumble_table(self, data):
-        playsound(self.TUMBLING_SOUND, False)
+        self.play_sound(sound_file=self.TUMBLING_SOUND, sync=False)
         self.update_table(data)
       
       
@@ -106,8 +106,8 @@ class Playing(object):
         self.scr.refresh()
         self.scr.addstr(y, x, message)
         self.scr.refresh()
-        playsound(self.WIN_SOUND)
-        self.sleep()
+        self.play_sound(sound_file=self.WIN_SOUND)
+        self.sleep(additional=0.8)
       
       
     def prize(self, data=0):
@@ -118,8 +118,8 @@ class Playing(object):
         self.scr.refresh()
         self.scr.addstr(y, x, message)
         self.scr.refresh()
-        playsound(self.TOTAL_WIN_SOUND)
-        self.sleep()
+        self.play_sound(sound_file=self.TOTAL_WIN_SOUND)
+        self.sleep(additional=0.5)
       
       
     def bonus_rounds(self, data=0):
@@ -131,7 +131,7 @@ class Playing(object):
         self.scr.refresh()
         self.scr.addstr(y, x, message)
         self.scr.refresh()
-        playsound(self.BONUS_SOUND)
+        self.play_sound(sound_file=self.BONUS_SOUND)
         self.sleep(additional=1)
       
       
@@ -148,13 +148,17 @@ class Playing(object):
     
     def cash_in(self, data=0):
         if data > 0:
-          playsound(self.GAME_OVER_SOUND, False)
+          self.play_sound(sound_file=self.GAME_OVER_SOUND, sync=False)
           self.sleep()
         else:
-          playsound(self.NO_WIN_SOUND, False)
+          self.play_sound(sound_file=self.NO_WIN_SOUND, sync=False)
           self.sleep()
       
     
     def sleep(self, additional=0):
-      if self.context['speed'] > 0:
+      if self.context['speed'] > 0 or additional > 0:
         time.sleep(self.context['speed'] + additional)
+        
+    def play_sound(self, sound_file=None, sync=True):
+      if self.context['sounds_on']:
+        playsound(sound_file, sync)

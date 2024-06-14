@@ -25,6 +25,7 @@ class Repl(object):
             'last_prize': 0,
             'auto_play': 1,
             'speed': 0.5,
+            'sounds_on': True,
             'height': 0,
             'width': 0,
         }

@@ -12,7 +12,8 @@ class InGame(object):
             'b': lambda _: None,
             't': lambda _: None,
             ' ': lambda _: self.play(),
-            'a': lambda _: self.set_auto_play()
+            'a': lambda _: self.set_auto_play(),
+            's': lambda _: self.toggle_sound()
         }
         
         
@@ -32,7 +33,9 @@ class InGame(object):
         self.scr.addstr(
             6, 0, f'Press T to toggle Turbo Mode 🏎️  - Turbo On? {self.context['speed'] == 0}')
         self.scr.addstr(
-            7, 0, f'Last Prize 🤑 - ${self.context['last_prize']}')
+            7, 0, f'Press S to toggle Sounds - Sounds On? {self.context['sounds_on']}')
+        self.scr.addstr(
+            8, 0, f'Last Prize 🤑 - ${self.context['last_prize']}')
         if self.context['last_game']:
             start_y = (self.context['height'] - len(self.context['last_game'])) // 3
             start_x = (self.context['width'] // 2) - ((len(self.context['last_game']) // 2) * 7)
@@ -92,4 +95,11 @@ class InGame(object):
 
     def set_bet_value(self, bet: int):
         self.context['bet_value'] = bet
+        return self.context
+      
+    def toggle_sound(self):
+        if self.context['sounds_on']:
+          self.context['sounds_on'] = False
+        else:
+          self.context['sounds_on'] = True
         return self.context
