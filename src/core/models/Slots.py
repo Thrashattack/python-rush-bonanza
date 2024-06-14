@@ -8,12 +8,12 @@ from src.core.models.WinCluster import WinCluster
 
 class Slots(object):
     """
-        Slots Machine Implementation
-        The Variance is given by the difference of the payouts for each symbol.
-        On default configuration the highest paying symbol pays 100% of the bet and the lowest 20%. Therefore a High variance.
-        The RTP is calculated over time with monte carlo simulations and is asserted through behavioral tests to be between 87% and 97%
-        The Volatility is given by the Lucky Symbol chance combined with each symbol chance.
-        On default configuration the change of lucky symbol is 20% and the highest paying symbol chance is 3.50% yielding a low volatility
+        Slots Machine Implementation\n
+        The Variance is given by the difference of the payouts for each symbol.\n
+        On default configuration the highest paying symbol pays 100% of the bet and the lowest 20%. Therefore a High variance.\n
+        The RTP is calculated over time with monte carlo simulations and is asserted through behavioral tests to be between 87% and 97%\n
+        The Volatility is given by the Lucky Symbol chance combined with each symbol chance.\n
+        On default configuration the chance of lucky symbol is 20% and the highest paying symbol chance is 3.50% yielding a low volatility
     """
     SCATTER_SYMBOL = Symbol(value=1, symbol='💟')
     WIN_SYMBOL = Symbol(value=0, symbol='🔥')
