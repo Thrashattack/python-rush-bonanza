@@ -7,19 +7,19 @@ from playsound import playsound
 
 class Playing(object):
     TUMBLING_SOUND = os.path.join(os.path.dirname(
-        __file__), '../assets/mixkit-cards-deck-hits-1994.wav')
+        __file__), '../../assets/mixkit-cards-deck-hits-1994.wav')
     GAME_OVER_SOUND = os.path.join(os.path.dirname(
-        __file__), '../assets/mixkit-casino-bling-achievement-2067.wav')
+        __file__), '../../assets/mixkit-casino-bling-achievement-2067.wav')
     TOTAL_WIN_SOUND = os.path.join(os.path.dirname(
-        __file__), '../assets/mixkit-clinking-coins-1993.wav')
+        __file__), '../../assets/mixkit-clinking-coins-1993.wav')
     WIN_SOUND = os.path.join(os.path.dirname(
-        __file__), '../assets/mixkit-coins-handling-1939.wav')
+        __file__), '../../assets/mixkit-coins-handling-1939.wav')
     BONUS_SOUND = os.path.join(os.path.dirname(
-        __file__), '../assets/mixkit-magical-coin-win-1936.wav')
+        __file__), '../../assets/mixkit-magical-coin-win-1936.wav')
     ROLLING_SOUND = os.path.join(os.path.dirname(
-        __file__), '../assets/mixkit-slot-machine-win-alert-1931.wav')
+        __file__), '../../assets/mixkit-slot-machine-win-alert-1931.wav')
     NO_WIN_SOUND = os.path.join(os.path.dirname(
-        __file__), '../assets/mixkit-thin-metal-card-deck-shuffle-3175.wav')
+        __file__), '../../assets/mixkit-thin-metal-card-deck-shuffle-3175.wav')
     
   
     def __init__(self, scr=None, context=None):
