@@ -1,5 +1,5 @@
 import sys
-from src.infra.http.Api import Api
+import os
 from src.infra.stdio.Repl import Repl
 from src.infra.db.sqlite.migrations import migrate
 
@@ -10,10 +10,15 @@ if __name__ == '__main__':
             Repl().bootstrap()
         case '--http':
             migrate()
-            Api()
+            match sys.argv[2]:
+                case '--dev':
+                    os.system('fastapi dev src/infra/http/api.py')
+                case '--prod':
+                    os.system('fastapi run src/infra/http/api.py')
         case '--help' | _:
             print("PYTHON GEMS BONANZA")
-            print("Usage: python3 . [--stdio|--http|--help]")
+            print("Usage: python3 . [--stdio|--http[--dev|--prod]|--help]")
             print("--stdio: Run the shell (terminal) game")
-            print("--http: Run the Web game")
+            print("--http --dev: Run the Web game in dev mode")
+            print("--http --run: Run the Web game in prod mode")
             print("--help: Print this help message")
