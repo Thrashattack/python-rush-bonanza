@@ -4,7 +4,7 @@ from .exceptions.NotFoundException import NotFoundException
 
 
 class WalletRepository(object):
-    def fetch_wallet(player_id: int):
+    def fetch_wallet(player_id: int) -> Wallet:
         with connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
@@ -21,7 +21,7 @@ class WalletRepository(object):
             else:
                 raise NotFoundException(entity='Wallet', id=str(player_id))
 
-    def create_wallet(player_id: int, balance=1000000):
+    def create_wallet(player_id: int, balance=1000000) -> Wallet:
         with connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
@@ -30,7 +30,7 @@ class WalletRepository(object):
             connection.commit()
             return WalletRepository.fetch_wallet(player_id=player_id)
 
-    def update_balance(balance: int, wallet_id: int):
+    def update_balance(balance: int, wallet_id: int) -> None:
         with connect() as connection:
             cursor = connection.cursor()
             cursor.execute(

@@ -6,7 +6,7 @@ from .exceptions.NotFoundException import NotFoundException
 
 
 class PlayerRepository(object):
-    def fetch_player(name: str, password: str):
+    def fetch_player(name: str, password: str) -> Player:
         with connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
@@ -19,7 +19,7 @@ class PlayerRepository(object):
             else:
                 raise NotFoundException(entity='Player', id=name)
 
-    def create_player(name: str, password: str):
+    def create_player(name: str, password: str) -> Player:
         try:
             with connect() as connection:
                 cursor = connection.cursor()

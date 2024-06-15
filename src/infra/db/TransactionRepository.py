@@ -4,7 +4,7 @@ import time
 
 
 class TransactionRepository(object):
-    def fetch_transactions(wallet_id: int, limit: int = 20):
+    def fetch_transactions(wallet_id: int, limit: int = 20) -> list:
         with connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
@@ -23,7 +23,7 @@ class TransactionRepository(object):
             value: int,
             operation: str,
             timestamp=time.ctime()
-    ):
+    ) -> None:
         with connect() as connection:
             cursor = connection.cursor()
             cursor.execute(
