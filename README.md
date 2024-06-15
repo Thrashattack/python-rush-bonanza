@@ -22,4 +22,6 @@ https://github.com/Thrashattack/python-rush-bonanza/assets/23486776/5f0da42d-11e
 
 - Access the project root directory
 
-> fastapi dev|run __main__.py -d --http
+> python3 . --http --dev (development mode)
+
+> python3 . --http --prod (production mode)
