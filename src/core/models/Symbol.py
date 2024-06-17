@@ -1,4 +1,4 @@
-class Symbol(object):
+class Symbol(dict):
     """
         The value of a symbol represents the percentage of the bet that it pays
         E.g bet = 100 ($1.00)
@@ -9,6 +9,7 @@ class Symbol(object):
     def __init__(self, value: int, symbol: str):
         self.value = value
         self.symbol = symbol
+        dict.__init__(self, symbol=symbol)
 
     def __str__(self):
         return self.symbol
