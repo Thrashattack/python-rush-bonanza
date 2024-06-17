@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>🎰 Python Rush Bonanza 🎰</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/menu.css" />
+    <link
+      href="{{ url_for('images', path='/favicon.ico') }}"
+      rel="shortcut icon"
+    />
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="#">upgrade your browser</a> to improve your experience.
+      </p>
+    <![endif]-->
+    <div class="navbar">
+      Welcome {{ player.name }} to 🎰 Python Rush Bonanza 🎰 - Legends Edition
+      🏝️
+    </div>
+    <div class="main-container">
+      <div class="button-container">
+        <button onclick="playGame()">Play</button>
+        <button onclick="transactions()">Transactions</button>
+      </div>
+      <img
+        src="{{ url_for('images', path='/slider.png') }}"
+        alt="Footer Image"
+        class="footer-image"
+      />
+    </div>
+    <div class="fan-images left-images">
+      <img src="{{ url_for('images', path='/bronze.webp') }}" alt="Image 1" />
+      <img src="{{ url_for('images', path='/silver.webp') }}" alt="Image 2" />
+      <img src="{{ url_for('images', path='/platinum.webp') }}" alt="Image 3" />
+    </div>
+    <div class="fan-images right-images">
+      <img src="{{ url_for('images', path='/master.webp') }}" alt="Image 4" />
+      <img
+        src="{{ url_for('images', path='/grand_master.webp') }}"
+        alt="Image 5"
+      />
+      <img
+        src="{{ url_for('images', path='/challenger.webp') }}"
+        alt="Image 6"
+      />
+    </div>
+    <script src="js/menu.js" async defer></script>
+  </body>
+</html>
