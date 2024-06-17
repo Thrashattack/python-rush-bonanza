@@ -10,7 +10,7 @@ class Slots(object):
     """
         Slots Machine Implementation\n
         The Variance is given by the difference of the payouts for each symbol.\n
-        On default configuration the highest paying symbol pays 100% of the bet and the lowest 20%. Therefore a High variance.\n
+        On default configuration the highest paying symbol pays 100% of the bet and the lowest 10%. Therefore a High variance.\n
         The RTP is calculated over time with monte carlo simulations and is asserted through behavioral tests to be between 87% and 97%\n
         The Volatility is given by the Lucky Symbol chance combined with each symbol chance.\n
         On default configuration the chance of lucky symbol is 20% and the highest paying symbol chance is 3.50% yielding a low volatility
@@ -41,14 +41,15 @@ class Slots(object):
         '7': 20,
     }
 
-    def __init__(self, odds=DEFAULT_SYMBOLS, size=DEFAULT_SIZE):
+    def __init__(self, odds=DEFAULT_SYMBOLS, size=DEFAULT_SIZE, scatter=SCATTER_SYMBOL):
         self.odds = odds
         self.size = size
         self.table = [
-            [self.SCATTER_SYMBOL for _ in range(size)] for _ in range(size)]
+            [scatter for _ in range(size)] for _ in range(size)]
         self.wins = []
         self.visited = []
         self.scatter_count = 0
+        self.scatter_symbol = scatter
 
     def fill_table(self, only_empty=False):
         """
@@ -63,7 +64,7 @@ class Slots(object):
                 if only_empty and self.table[j][i] != self.EMPTY_SYMBOL:
                     continue
                 elif self.is_scatter():
-                    self.table[j][i] = self.SCATTER_SYMBOL
+                    self.table[j][i] = self.scatter_symbol
                     self.scatter_count += 1
                 elif self.is_lucky():
                     self.table[j][i] = lucky_symbol
@@ -92,7 +93,7 @@ class Slots(object):
                 0 <= column < self.size and
                 not (row, column) in self.visited and
                 self.table[row][column] == symbol and
-                symbol != self.SCATTER_SYMBOL and 
+                symbol != self.scatter_symbol and 
                 symbol != self.WIN_SYMBOL)
 
     def bfs_cluster_size(self, start_row: int, start_column: int, symbol: Symbol):
