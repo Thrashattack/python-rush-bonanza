@@ -10,11 +10,8 @@
     <title>🎰 Python Rush Bonanza 🎰</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="css/in_game.css" />
-    <link
-      href="{{ url_for('images', path='/favicon.ico') }}"
-      rel="shortcut icon"
-    />
+    <link rel="stylesheet" href="/css/in_game.css" />
+    <link href="/images/favicon.ico" rel="shortcut icon" />
   </head>
   <body>
     <!--[if lt IE 7]>
@@ -65,11 +62,7 @@
     </div>
     <div class="main-container">
       <div class="game-table" id="gameTable"></div>
-      <img
-        src="{{ url_for('images', path='/slider.png') }}"
-        alt="Footer Image"
-        class="footer-image"
-      />
+      <img src="/images/slider.png" alt="Footer Image" class="footer-image" />
     </div>
     <div class="floating-bonus">
       Get 3 or more
@@ -84,71 +77,59 @@
       <span id="autoPlaysCount"></span>
     </button>
     <audio id="backgroundMusic" loop>
-      <source
-        src="{{ url_for('assets', path='/legends-no-copyright.mp3') }}"
-        type="audio/mpeg"
-      />
+      <source src="/assets/legends-no-copyright.mp3" type="audio/mpeg" />
       Your browser does not support the audio element.
     </audio>
     <audio id="rollingSound">
       <source
-        src="{{ url_for('assets', path='/mixkit-slot-machine-win-alert-1931.wav') }}"
+        src="/assets/mixkit-slot-machine-win-alert-1931.wav"
         type="audio/mpeg"
       />
       Your browser does not support the audio element.
     </audio>
     <audio id="winSound">
-      <source
-        src="{{ url_for('assets', path='/mixkit-coins-handling-1939.wav') }}"
-        type="audio/mpeg"
-      />
+      <source src="/assets/mixkit-coins-handling-1939.wav" type="audio/mpeg" />
       Your browser does not support the audio element.
     </audio>
     <audio id="prizeSound">
-      <source
-        src="{{ url_for('assets', path='/mixkit-clinking-coins-1993.wav') }}"
-        type="audio/mpeg"
-      />
+      <source src="/assets/mixkit-clinking-coins-1993.wav" type="audio/mpeg" />
       Your browser does not support the audio element.
     </audio>
     <audio id="noWinSound">
       <source
-        src="{{ url_for('assets', path='/mixkit-thin-metal-card-deck-shuffle-3175.wav') }}"
+        src="/assets/mixkit-thin-metal-card-deck-shuffle-3175.wav"
         type="audio/mpeg"
       />
       Your browser does not support the audio element.
     </audio>
     <audio id="bonusRoundsSound">
       <source
-        src="{{ url_for('assets', path='/mixkit-magical-coin-win-1936.wav') }}"
+        src="/assets/mixkit-magical-coin-win-1936.wav"
         type="audio/mpeg"
       />
       Your browser does not support the audio element.
     </audio>
     <audio id="endGameSound">
       <source
-        src="{{ url_for('assets', path='/mixkit-casino-bling-achievement-2067.wav') }}"
+        src="/assets/mixkit-casino-bling-achievement-2067.wav"
         type="audio/mpeg"
       />
       Your browser does not support the audio element.
     </audio>
     <audio id="tumblingSound">
-      <source
-        src="{{ url_for('assets', path='/mixkit-cards-deck-hits-1994.wav') }}"
-        type="audio/mpeg"
-      />
+      <source src="/assets/mixkit-cards-deck-hits-1994.wav" type="audio/mpeg" />
       Your browser does not support the audio element.
     </audio>
     <audio id="explosionSound">
       <source
-        src="{{ url_for('assets', path='/mixkit-arcade-game-explosion-1699.wav') }}"
+        src="/assets/mixkit-arcade-game-explosion-1699.wav"
         type="audio/mpeg"
       />
       Your browser does not support the audio element.
     </audio>
     <audio id="scatterSound">
       <source
-        src="{{ url_for('assets', path='/mixkit-axe-hits-to-a-plate-2774.wav') }}"
+        src="/assets/mixkit-axe-hits-to-a-plate-2774.wav"
         type="audio/mpeg"
       />
       Your browser does not support the audio element.
@@ -171,6 +152,6 @@
         >
       </div>
     </span>
-    <script src="js/in_game.js" async defer></script>
+    <script src="/js/in_game.js" async defer></script>
   </body>
 </html>
