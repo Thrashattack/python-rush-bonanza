@@ -14,7 +14,7 @@ if __name__ == '__main__':
                 case '--dev':
                     os.system('fastapi dev src/infra/http/api.py')
                 case '--prod':
-                    os.system('fastapi run src/infra/http/api.py &')
+                    os.system('fastapi run src/infra/http/api.py --port=8081 &')
         case '--help' | _:
             print("PYTHON GEMS BONANZA")
             print("Usage: python3 . [--stdio|--http[--dev|--prod]|--help]")
