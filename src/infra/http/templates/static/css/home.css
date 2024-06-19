@@ -16,14 +16,24 @@ header {
   margin-bottom: 20px;
   color: rgb(195, 227, 255);
   position: fixed;
-  top: 30px;
+  top: 5%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 header.subheader {
   font-size: 2em;
   margin-bottom: 20px;
   color: rgb(195, 227, 255);
   position: fixed;
-  top: 100px;
+  top: 20%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 footer {
   font-size: 0.8em;
@@ -31,6 +41,11 @@ footer {
   color: rgb(195, 227, 255);
   position: fixed;
   bottom: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 .button-container {
   display: flex;

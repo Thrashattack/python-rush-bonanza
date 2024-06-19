@@ -7,3 +7,8 @@ function playGame() {
 function transactions() {
   window.location.href = "/transactions?token=" + token;
 }
+
+function exitGame() {
+  sessionStorage.removeItem("userToken");
+  window.location.href = "/";
+}

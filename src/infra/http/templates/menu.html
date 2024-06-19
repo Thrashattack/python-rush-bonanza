@@ -21,25 +21,28 @@
       </p>
     <![endif]-->
     <div class="navbar">
-      Welcome {{ player.name }} to 🎰 Python Rush Bonanza 🎰 - Legends Edition
-      🏝️
+      <div>Welcome {{ player.name }} to 🎰 Python Rush Bonanza 🎰</div>
+      <div>Legends Edition 🏝️</div>
     </div>
     <div class="main-container">
       <div class="button-container">
-        <button onclick="playGame()">Play</button>
-        <button onclick="transactions()">Transactions</button>
+        <button class="play-button" onclick="playGame()">Play</button>
+        <button class="transactions-button" onclick="transactions()">
+          Transactions
+        </button>
+        <button class="exit-button" onclick="exitGame()">Exit</button>
       </div>
       <img src="/images/slider.png" alt="Footer Image" class="footer-image" />
-    </div>
-    <div class="fan-images left-images">
-      <img src="/images/bronze.webp" alt="Image 1" />
-      <img src="/images/silver.webp" alt="Image 2" />
-      <img src="/images/platinum.webp" alt="Image 3" />
-    </div>
-    <div class="fan-images right-images">
-      <img src="/images/master.webp" alt="Image 4" />
-      <img src="/images/grand_master.webp" alt="Image 5" />
-      <img src="/images/challenger.webp" alt="Image 6" />
+      <div class="fan-images left-images">
+        <img src="/images/bronze.webp" alt="Image 1" />
+        <img src="/images/silver.webp" alt="Image 2" />
+        <img src="/images/platinum.webp" alt="Image 3" />
+      </div>
+      <div class="fan-images right-images">
+        <img src="/images/master.webp" alt="Image 4" />
+        <img src="/images/grand_master.webp" alt="Image 5" />
+        <img src="/images/challenger.webp" alt="Image 6" />
+      </div>
     </div>
     <script src="/js/menu.js" async defer></script>
   </body>
