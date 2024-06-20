@@ -71,8 +71,8 @@ body {
     width: 95%;
     color: white;
     text-align: center;
-    padding: 10px;
     border-radius: 0 0 10px 10px;
+    margin-top: -20px;
     img {
       max-width: 92vw;
     }
@@ -98,10 +98,11 @@ body {
     gap: 20px;
     align-items: end;
     width: 100%;
+    margin-top: -15px;
 }
 
 .button-container button {
-    padding: 3% 4%;
+    padding: 2% 3%;
     font-size: 0.8em;
     cursor: pointer;
     border: none;
@@ -184,6 +185,7 @@ body {
     grid-template-rows: repeat(7, 9vh);
     gap: 5px;
     margin-top: -10px;
+    border-top: 2px solid #3d0438;
 }
 
 .game-table .cell {
@@ -192,8 +194,8 @@ body {
     padding-top: 100%; /* Maintain aspect ratio */
     overflow: visible;
     border-radius: 5px;
-    border-left: 2px solid #220029;
-    border-right: 2px solid #220029;
+    border-left: 2px solid #3d0438;
+    border-right: 2px solid #3d0438;
 }
 
 .game-table .cell .symbol-container {
@@ -368,7 +370,10 @@ body {
     }
 
     .button-container {
+        width: 100%;
         align-items: center;
+        justify-content: center;
+        margin-top: 0;
     }
 
     .floating-play-button, .floating-bonus, .floating-win, .floating-prize {
@@ -378,6 +383,6 @@ body {
 
     .game-table {
         grid-template-columns: repeat(7, 12vw);
-        grid-template-rows: repeat(7, 7vh);
+        grid-template-rows: repeat(7, 6vh);
     }
 }
