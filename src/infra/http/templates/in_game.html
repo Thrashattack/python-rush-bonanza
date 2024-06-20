@@ -23,6 +23,7 @@
     <div id="alert" class="alert"></div>
     <div class="navbar">
       <div class="left-section">
+        <button id="menuButton" onclick="backToMenu()">Menu</button>
         <button id="muteButton" onclick="toggleMute()">🔇</button>
         <div>
           <label for="betValue">Bet Value: </label>
@@ -52,29 +53,34 @@
         </div>
       </div>
       <div class="right-section">
-        <div>
-          <button id="menuButton">Menu</button> Welcome {{ player.name }}
-        </div>
+        <div>Welcome {{ player.name }}</div>
         <div>Wallet Balance: <span id="walletBalance">{{ wallet }}</span></div>
         <div>Current Bet: <span id="currentBet">$5</span></div>
       </div>
     </div>
     <div class="main-container">
       <div class="game-table" id="gameTable"></div>
+      <div class="button-container">
+        <button class="floating-play-button" onclick="play()">
+          <div class="play-text">Play</div>
+          <div class="cycling-arrows">🔄</div>
+          <span id="autoPlaysCount"></span>
+        </button>
+
+        <div class="floating-bonus">
+          Get 3 or more
+          <img src="../images/baiano.webp" width="40px" height="40px" />
+          To win free spins
+        </div>
+
+        <div class="floating-win"></div>
+
+        <div class="floating-prize"></div>
+      </div>
+    </div>
+    <div class="footer">
       <img src="/images/slider.png" alt="Footer Image" class="footer-image" />
     </div>
-    <div class="floating-bonus">
-      Get 3 or more
-      <img src="../images/baiano.webp" width="40px" height="40px" />
-      To win free spins
-    </div>
-    <div class="floating-win"></div>
-    <div class="floating-prize"></div>
-    <button class="floating-play-button" onclick="play()">
-      <span class="play-text">Spin</span>
-      <span class="cycling-arrows">🔄</span>
-      <span id="autoPlaysCount"></span>
-    </button>
     <audio id="backgroundMusic" loop>
       <source src="/assets/legends-no-copyright.mp3" type="audio/mpeg" />
       Your browser does not support the audio element.

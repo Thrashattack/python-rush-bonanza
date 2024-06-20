@@ -55,6 +55,10 @@ const table = Array(7)
 // Play background music
 backgroundMusic.play();
 
+function backToMenu() {
+  window.location.href = "/menu?token=" + sessionStorage.getItem("userToken");
+}
+
 function toggleMute() {
   if (isMuted) {
     backgroundMusic.play();
@@ -109,12 +113,12 @@ function renderTable() {
         const borderDiv = document.createElement("div");
         borderDiv.className = "border";
         borderDiv.style.backgroundImage = `url(${borders[symbolIndex]})`;
-        borderDiv.style.marginTop = `${75 * (i + 1)}px`;
+        borderDiv.style.marginTop = `${150 * (i + 1)}px`;
 
         const symbolDiv = document.createElement("div");
         symbolDiv.className = "symbol";
         symbolDiv.style.backgroundImage = `url(${symbols[symbolIndex]})`;
-        symbolDiv.style.marginTop = `${75 * (i + 1)}px`;
+        symbolDiv.style.marginTop = `${150 * (i + 1)}px`;
         symbolDiv.style.marginLeft = "-30px";
 
         symbolContainer.appendChild(borderDiv);
@@ -188,7 +192,6 @@ function play() {
         }
       })
       .catch((error) => {
-        console.log(error);
         showAlert(`Error: ${error}`);
       });
   }
@@ -196,7 +199,6 @@ function play() {
 
 const UpdateHandler = {
   fill_table: (data, action_number) => {
-    console.log("fill table");
     if (action_number == 0) {
       totalPlays++;
       startSpinning();
@@ -257,11 +259,10 @@ const UpdateHandler = {
     }
   },
   find_clusters_and_update: (data, action_number) => {
-    console.log("find clusters and update");
     for (let i = 0; i < data.length; i++) {
       for (let j = 0; j < data.length; j++) {
         const cell = document.querySelector(
-          `.cell[data-row="${i}"][data-col="${j}"]`
+          `.cell[data-row="${i}"][data-col="${j}"] .symbol-container`
         );
 
         if (data[i][j].symbol == "🔥") {
@@ -277,14 +278,14 @@ const UpdateHandler = {
             cell.classList.remove("explosion");
             border.style.backgroundImage = "none";
             symbol.style.backgroundImage = "none";
-          }, 500);
+          }, 1500);
         }
       }
     }
   },
   win_symbol: (data, action_number) => {
     if (!isMuted) winSound.play();
-    console.log("Win Symbol");
+
     winDiv = document.querySelector(".floating-win");
     winDiv.classList.add("blinking");
     winDiv.innerHTML = `<img src='${data.symbol.symbol}' width='40px' height='40px'> x ${data.size} pays $${data.amount}`;
@@ -293,7 +294,6 @@ const UpdateHandler = {
     }, 1000);
   },
   tumble_table: (data, action_number) => {
-    console.log("tumble table");
     // UpdateHandler["fill_table"](data);
     for (let i = 0; i < data.length; i++) {
       for (let j = 0; j < data.length; j++) {
@@ -319,7 +319,7 @@ const UpdateHandler = {
   },
   prize: (data, action_number) => {
     if (!isMuted) prizeSound.play();
-    console.log("Win Symbol");
+
     prizeDiv = document.querySelector(".floating-prize");
     prizeDiv.innerHTML = `Total win: $${data}`;
     prizeDiv.classList.add("blinking");
@@ -330,7 +330,7 @@ const UpdateHandler = {
   cash_in: (data, action_number) => {
     if (data > 0) {
       if (!isMuted) endGameSound.play();
-      console.log("Cash In");
+
       walletBalanceDiv = document.querySelector("#walletBalance");
       let balance = Number.parseFloat(walletBalanceDiv.innerHTML.split(" ")[1]);
       balance += data / 100;
@@ -352,7 +352,6 @@ const UpdateHandler = {
     playButton.removeAttribute("disabled");
   },
   bonus_rounds: (data, action_number) => {
-    console.log(data);
     const bonusDiv = document.querySelector(".floating-bonus");
     bonusDiv.innerHTML = `Congrats you won ${data} Free Spins!`;
 
