@@ -1,248 +1,362 @@
-const token = sessionStorage.getItem("userToken");
+// Constants
+const SOUND_FILES = {
+  background: "backgroundMusic",
+  rolling: "rollingSound",
+  win: "winSound",
+  prize: "prizeSound",
+  noWin: "noWinSound",
+  bonusRounds: "bonusRoundsSound",
+  endGame: "endGameSound",
+  tumbling: "tumblingSound",
+  explosion: "explosionSound",
+  scatter: "scatterSound",
+  reRoll: "reRollSound",
+};
 
-const backgroundMusic = document.getElementById("backgroundMusic");
-const rollingSound = document.getElementById("rollingSound");
-const winSound = document.getElementById("winSound");
-const prizeSound = document.getElementById("prizeSound");
-const noWinSound = document.getElementById("noWinSound");
-const bonusRoundsSound = document.getElementById("bonusRoundsSound");
-const endGameSound = document.getElementById("endGameSound");
-const tumblingSound = document.getElementById("tumblingSound");
-const explosionSound = document.getElementById("explosionSound");
-const scatterSound = document.getElementById("scatterSound");
+const IMAGES = {
+  borders: [
+    "../images/challenger.webp",
+    "../images/grand_master.webp",
+    "../images/master.webp",
+    "../images/platinum.webp",
+    "../images/silver.webp",
+    "../images/bronze.webp",
+    "../images/bronze.webp",
+    "../images/bronze.webp",
+  ],
+  symbols: [
+    "../images/baiano.webp",
+    "../images/mylon.webp",
+    "../images/jime.webp",
+    "../images/esa.webp",
+    "../images/ranger.webp",
+    "../images/brucer.webp",
+    "../images/minerva.webp",
+    "../images/bagre.jpeg",
+  ],
+};
 
-const muteButton = document.getElementById("muteButton");
+const SELECTORS = {
+  menuButton: "menuButton",
+  muteButton: "muteButton",
+  betValue: "betValue",
+  betValueDisplay: "betValueDisplay",
+  currentBet: "currentBet",
+  autoPlays: "autoPlays",
+  autoPlaysDisplay: "autoPlaysDisplay",
+  gameTable: "gameTable",
+  alert: "alert",
+  walletBalance: "#walletBalance",
+  floatingPlayButton: ".floating-play-button",
+  autoPlaysCount: "autoPlaysCount",
+  floatingWin: ".floating-win",
+  floatingPrize: ".floating-prize",
+  floatingBonus: ".floating-bonus",
+};
 
-let isMuted = false;
-let isPlaying = false;
-
-const borders = [
-  "../images/challenger.webp",
-  "../images/grand_master.webp",
-  "../images/master.webp",
-  "../images/platinum.webp",
-  "../images/silver.webp",
-  "../images/bronze.webp",
-  "../images/bronze.webp",
-  "../images/bronze.webp",
-];
-
-const symbols = [
-  "../images/baiano.webp",
-  "../images/mylon.webp",
-  "../images/jime.webp",
-  "../images/esa.webp",
-  "../images/ranger.webp",
-  "../images/brucer.webp",
-  "../images/minerva.webp",
-  "../images/bagre.jpeg",
-];
-
-const table = Array(7)
-  .fill()
-  .map(() => {
-    return Array(7)
-      .fill()
-      .map(() => {
-        const symbolIndex = Number.parseInt(Math.random() * (8 - 0) + 0);
-        return {
-          border: borders[symbolIndex],
-          symbol: symbols[symbolIndex],
-        };
-      });
-  }); // Initialize the table with default images
-
-// Play background music
-backgroundMusic.play();
-
-function backToMenu() {
-  window.location.href = "/menu?token=" + sessionStorage.getItem("userToken");
+// Helper Functions
+function getElement(selector) {
+  return document.getElementById(selector) || document.querySelector(selector);
 }
 
-function toggleMute() {
-  if (isMuted) {
-    backgroundMusic.play();
-    muteButton.textContent = "🔇";
-  } else {
-    backgroundMusic.pause();
-    muteButton.textContent = "🔉";
+function getElements(selector) {
+  return document.querySelectorAll(selector);
+}
+
+function createElement(tag, className, attributes = {}, styles = {}) {
+  const element = document.createElement(tag);
+  element.className = className;
+
+  Object.entries(attributes).forEach(([key, value]) => {
+    element.setAttribute(key, value);
+  });
+
+  Object.entries(styles).forEach(([key, value]) => {
+    element.style[key] = value;
+  });
+
+  return element;
+}
+
+// Audio Management
+class AudioManager {
+  constructor() {
+    this.isMuted = false;
+    this.sounds = this.initializeSounds();
   }
-  isMuted = !isMuted;
-}
 
-function updateBetValue() {
-  const betValue = document.getElementById("betValue").value;
-  document.getElementById("betValueDisplay").textContent = betValue;
-  document.getElementById("currentBet").textContent = `$ ${betValue}`;
-  currentBet = betValue;
-}
+  initializeSounds() {
+    const sounds = {};
+    Object.entries(SOUND_FILES).forEach(([key, id]) => {
+      sounds[key] = getElement(id);
+    });
+    return sounds;
+  }
 
-function updateAutoPlays() {
-  const autoPlays = document.getElementById("autoPlays").value;
-  document.getElementById("autoPlaysDisplay").textContent = autoPlays;
-}
+  toggleMute() {
+    this.isMuted = !this.isMuted;
+    if (this.isMuted) {
+      this.sounds.background.pause();
+      getElement(SELECTORS.muteButton).textContent = "🔉";
+    } else {
+      this.sounds.background.play();
+      getElement(SELECTORS.muteButton).textContent = "🔇";
+    }
+  }
 
-function renderTable() {
-  const gameTable = document.getElementById("gameTable");
-  gameTable.innerHTML = "";
-  for (let row = 0; row < table.length; row++) {
-    for (let col = 0; col < table.length; col++) {
-      const cell = table[row][col];
-      const cellDiv = document.createElement("div");
-      cellDiv.className = "cell";
-      cellDiv.dataset.row = row;
-      cellDiv.dataset.col = col;
-
-      const borderDiv = document.createElement("div");
-      borderDiv.className = "border";
-      borderDiv.style.backgroundImage = `url(${cell.border})`;
-
-      const symbolContainer = document.createElement("div");
-      symbolContainer.className = "symbol-container";
-      symbolContainer.append(borderDiv);
-
-      const symbolDiv = document.createElement("div");
-      symbolDiv.className = "symbol";
-      symbolDiv.style.backgroundImage = `url(${cell.symbol})`;
-      symbolContainer.appendChild(symbolDiv);
-
-      for (let i = 0; i < 10; i++) {
-        // Add multiple symbols for better spinning effect
-        const symbolIndex = Number.parseInt(Math.random() * (8 - 0) + 0);
-
-        const borderDiv = document.createElement("div");
-        borderDiv.className = "border";
-        borderDiv.style.backgroundImage = `url(${borders[symbolIndex]})`;
-        borderDiv.style.marginTop = `${150 * (i + 1)}px`;
-
-        const symbolDiv = document.createElement("div");
-        symbolDiv.className = "symbol";
-        symbolDiv.style.backgroundImage = `url(${symbols[symbolIndex]})`;
-        symbolDiv.style.marginTop = `${150 * (i + 1)}px`;
-        symbolDiv.style.marginLeft = "-30px";
-
-        symbolContainer.appendChild(borderDiv);
-        symbolContainer.appendChild(symbolDiv);
-      }
-
-      cellDiv.appendChild(symbolContainer);
-      gameTable.appendChild(cellDiv);
+  playSound(name) {
+    if (!this.isMuted && this.sounds[name]) {
+      this.sounds[name].play();
     }
   }
 }
 
-function startSpinning() {
-  const cells = document.querySelectorAll(".symbol-container .symbol");
-  cells.forEach((cell) => {
-    cell.classList.add("spin-vertical");
-  });
-
-  const cells2 = document.querySelectorAll(".symbol-container .border");
-  cells2.forEach((cell) => {
-    cell.classList.add("spin-vertical");
-  });
-}
-
-function stopSpinning() {
-  const cells = document.querySelectorAll(".spin-vertical");
-  cells.forEach((cell) => {
-    cell.classList.remove("spin-vertical");
-  });
-}
-
-function showAlert(message) {
-  if (!message) return;
-
-  const alert = document.getElementById("alert");
-  alert.textContent = message;
-  alert.classList.add("show");
-  setTimeout(() => {
-    alert.classList.remove("show");
-  }, 3000);
-}
-let totalPlays = 0;
-function play() {
-  totalPlays = 0;
-  const betValue = document.getElementById("betValue").value * 100;
-  const autoPlays = document.getElementById("autoPlays").value;
-  if (betValue == 0 || autoPlays == 0) {
-    return showAlert("Please Set Bet Value and Auto Plays");
+// DOM Manipulation
+class DOMManager {
+  constructor(gameManager) {
+    this.audioManager = new AudioManager();
+    this.gameManager = gameManager;
+    this.initializeEventListeners();
+    this.audioManager.playSound("background");
   }
 
-  let timer = 500;
-  for (let i = 0; i < autoPlays; i++) {
-    fetch(`/playing?token=${token}&bet_value=${betValue}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.error) {
-          showAlert(`Error: ${response.error}`);
-        }
+  initializeEventListeners() {
+    getElement(SELECTORS.muteButton).addEventListener("click", () =>
+      this.audioManager.toggleMute()
+    );
+    getElement(SELECTORS.floatingPlayButton).addEventListener("click", () =>
+      this.gameManager.play()
+    );
+    getElement(SELECTORS.menuButton).addEventListener("click", () => {
+      window.location.href = "/menu?token=" + this.gameManager.token;
+    });
 
-        for (let j = 0; j < response.length; j++) {
-          const update = response[j];
-          setTimeout(() => {
-            UpdateHandler[update.action](update.data, j);
-          }, timer); // 4 sec first roll action
-          j == 0 ? (timer += 4000) : (timer += 2000); // 2 sec each other action
-        }
-      })
-      .catch((error) => {
-        showAlert(`Error: ${error}`);
-      });
+    this.updateElementAttribute(SELECTORS.betValue, "onchange", () => {
+      this.updateTextContent(
+        SELECTORS.betValueDisplay,
+        getElement(SELECTORS.betValue).value
+      );
+
+      this.updateTextContent(
+        SELECTORS.currentBet,
+        `$ ${getElement(SELECTORS.betValue).value}`
+      );
+    });
+
+    this.updateElementAttribute(SELECTORS.autoPlays, "onchange", () => {
+      this.updateTextContent(
+        SELECTORS.autoPlaysDisplay,
+        getElement(SELECTORS.autoPlays).value
+      );
+    });
   }
-}
 
-const UpdateHandler = {
-  fill_table: (data, action_number) => {
-    if (action_number == 0) {
-      totalPlays++;
-      startSpinning();
-
-      const betValueInput = document.getElementById("betValue");
-      const autoPlaysInput = document.getElementById("autoPlays");
-      const playButton = document.querySelector(".floating-play-button");
-      const autoPlaysCount = document.getElementById("autoPlaysCount");
-
-      betValueInput.setAttribute("disabled", "true");
-      autoPlaysInput.setAttribute("disabled", "true");
-      playButton.setAttribute("disabled", "true");
-
-      walletBalanceDiv = document.querySelector("#walletBalance");
-      let balance = Number.parseFloat(walletBalanceDiv.innerHTML.split(" ")[1]);
-      balance -= betValueInput.value;
-      walletBalanceDiv.innerHTML = `$ ${balance.toFixed(1)}`;
-
-      autoPlaysCount.innerHTML = `${totalPlays}/${autoPlaysInput.value}`;
+  updateTextContent(selector, content) {
+    const element = getElement(selector);
+    if (element) {
+      element.textContent = content;
     }
-    if (action_number == 0 && !isMuted) {
-      rollingSound.play();
-    } else if (!isMuted) {
-      tumblingSound.play();
+  }
+
+  updateElementAttribute(selector, attribute, value) {
+    const element = getElement(selector);
+    if (element) {
+      element[attribute] = value;
     }
-    let timeout = 250;
-    for (let i = 0; i < data.length; i++) {
-      for (let j = 0; j < data.length; j++) {
-        setTimeout(() => {
-          const elements = document.querySelectorAll(
-            `.cell[data-row="${j}"][data-col="${i}"] .spin-vertical`
+  }
+
+  showAlert(message) {
+    if (!message) return;
+    const alert = getElement(SELECTORS.alert);
+    alert.textContent = message;
+    alert.classList.add("show");
+    setTimeout(() => alert.classList.remove("show"), 3000);
+  }
+
+  renderTable(table) {
+    const gameTable = getElement(SELECTORS.gameTable);
+    gameTable.innerHTML = "";
+
+    table.forEach((row, rowIndex) => {
+      row.forEach((cell, colIndex) => {
+        const cellDiv = createElement("div", "cell", {
+          "data-row": rowIndex,
+          "data-col": colIndex,
+        });
+
+        const symbolContainer = createElement("div", "symbol-container");
+        const borderDiv = createElement(
+          "div",
+          "border",
+          {},
+          {
+            backgroundImage: `url(${cell.border})`,
+          }
+        );
+
+        const symbolDiv = createElement(
+          "div",
+          "symbol",
+          {},
+          { backgroundImage: `url(${cell.symbol})` }
+        );
+
+        symbolContainer.append(borderDiv, symbolDiv);
+
+        for (let i = 0; i < 10; i++) {
+          const symbolIndex = Math.floor(Math.random() * IMAGES.symbols.length);
+          const extraBorderDiv = createElement(
+            "div",
+            "border",
+            {},
+            {
+              backgroundImage: `url(${IMAGES.borders[symbolIndex]})`,
+              marginTop: `${150 * (i + 1)}px`,
+            }
           );
-          elements.forEach((element) =>
+          const extraSymbolDiv = createElement(
+            "div",
+            "symbol",
+            {},
+            {
+              backgroundImage: `url(${IMAGES.symbols[symbolIndex]})`,
+              marginTop: `${150 * (i + 1)}px`,
+              marginLeft: "-30px",
+            }
+          );
+          symbolContainer.append(extraBorderDiv, extraSymbolDiv);
+        }
+
+        cellDiv.append(symbolContainer);
+        gameTable.append(cellDiv);
+      });
+    });
+  }
+
+  startSpinning() {
+    this.toggleSpinning(true);
+  }
+
+  stopSpinning() {
+    this.toggleSpinning(false);
+  }
+
+  toggleSpinning(isSpinning) {
+    const elements = getElements(
+      ".symbol-container .symbol, .symbol-container .border"
+    );
+    elements.forEach((element) => {
+      element.classList.toggle("spin-vertical", isSpinning);
+    });
+  }
+}
+
+// Game Logic
+class GameManager {
+  constructor() {
+    this.token = sessionStorage.getItem("userToken");
+    this.domManager = new DOMManager(this);
+    this.updateHandler = new UpdateHandler(this.domManager, this.token);
+    this.autoPlays = 0;
+    this.totalPlays = 0;
+    this.initializeTable();
+  }
+
+  initializeTable() {
+    this.table = Array.from({ length: 7 }, () =>
+      Array.from({ length: 7 }, () => {
+        const symbolIndex = Math.floor(Math.random() * IMAGES.symbols.length);
+        return {
+          border: IMAGES.borders[symbolIndex],
+          symbol: IMAGES.symbols[symbolIndex],
+        };
+      })
+    );
+    this.domManager.renderTable(this.table);
+  }
+
+  play() {
+    const betValue = parseInt(getElement(SELECTORS.betValue).value, 10) * 100;
+    this.autoPlays = parseInt(getElement(SELECTORS.autoPlays).value, 10);
+    if (betValue === 0 || this.autoPlays === 0) {
+      return this.domManager.showAlert("Please Set Bet Value and Auto Plays");
+    }
+
+    let timer = 500;
+    for (let i = 0; i < this.autoPlays; i++) {
+      fetch(`/playing?token=${this.token}&bet_value=${betValue}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.error) {
+            this.domManager.showAlert(`Error: ${response.error}`);
+          }
+
+          response.forEach((update, index) => {
+            setTimeout(() => {
+              this.handleUpdate(update, index);
+            }, timer);
+            timer += index === 0 ? 4000 : 2000;
+          });
+        })
+        .catch((error) => {
+          this.domManager.showAlert(`Error: ${error}`);
+        });
+    }
+  }
+
+  handleUpdate(update, actionNumber) {
+    if (this.updateHandler[update.action]) {
+      this.updateHandler[update.action](update.data, actionNumber);
+    }
+  }
+}
+
+// Update Handlers
+class UpdateHandler {
+  constructor(domManager, token) {
+    this.domManager = domManager;
+    this.token = token;
+    this.totalPlays = 0;
+  }
+
+  fill_table(data, actionNumber) {
+    if (actionNumber === 0) {
+      this.totalPlays = 0;
+      this.domManager.startSpinning();
+      this.updateControls(true);
+      this.updateWalletBalance();
+      this.updateAutoPlaysCount();
+      this.domManager.audioManager.playSound("rolling");
+    } else {
+      this.domManager.audioManager.playSound("reRoll");
+    }
+
+    for (let colIndex = 0; colIndex < data.length; colIndex++) {
+      for (let rowIndex = 0; rowIndex < data.length; rowIndex++) {
+        const cell = data[rowIndex][colIndex];
+
+        setTimeout(() => {
+          const spinningElements = getElements(
+            `.cell[data-row="${rowIndex}"][data-col="${colIndex}"] .spin-vertical`
+          );
+          spinningElements.forEach((element) =>
             element.classList.remove("spin-vertical")
           );
 
-          const border = document.querySelector(
-            `.cell[data-row="${j}"][data-col="${i}"] .border`
+          const border = getElement(
+            `.cell[data-row="${rowIndex}"][data-col="${colIndex}"] .border`
           );
-          const symbol = document.querySelector(
-            `.cell[data-row="${j}"][data-col="${i}"] .symbol`
+          const symbol = getElement(
+            `.cell[data-row="${rowIndex}"][data-col="${colIndex}"] .symbol`
           );
-          if (data[j][i].symbol == "../images/baiano.webp" && !isMuted) {
-            scatterSound.play();
+
+          if (cell.symbol === IMAGES.symbols[0]) {
+            this.domManager.audioManager.playSound("scatter");
             border.classList.add("blinking");
             symbol.classList.add("blinking");
             setTimeout(() => {
@@ -250,133 +364,148 @@ const UpdateHandler = {
               symbol.classList.remove("blinking");
             }, 1000);
           }
-          const borderIndex = symbols.indexOf(data[j][i].symbol);
-          border.style.backgroundImage = `url(${borders[borderIndex]})`;
-          symbol.style.backgroundImage = `url(${data[j][i].symbol})`;
-        }, timeout);
-        timeout += 25;
+
+          const borderIndex = IMAGES.symbols.indexOf(cell.symbol);
+          border.style.backgroundImage = `url(${IMAGES.borders[borderIndex]})`;
+          symbol.style.backgroundImage = `url(${cell.symbol})`;
+        }, 250 * colIndex + 25 * rowIndex);
       }
     }
-  },
-  find_clusters_and_update: (data, action_number) => {
-    for (let i = 0; i < data.length; i++) {
-      for (let j = 0; j < data.length; j++) {
-        const cell = document.querySelector(
-          `.cell[data-row="${i}"][data-col="${j}"] .symbol-container`
+  }
+
+  find_clusters_and_update(data) {
+    data.forEach((row, rowIndex) => {
+      row.forEach((cell, colIndex) => {
+        const cellDiv = getElement(
+          `.cell[data-row="${rowIndex}"][data-col="${colIndex}"] .symbol-container`
         );
 
-        if (data[i][j].symbol == "🔥") {
-          explosionSound.play();
-          cell.classList.add("explosion");
+        if (cell.symbol === "🔥") {
+          this.domManager.audioManager.playSound("explosion");
+          cellDiv.classList.add("explosion");
           setTimeout(() => {
-            const border = document.querySelector(
-              `.cell[data-row="${i}"][data-col="${j}"] .border`
+            const border = getElement(
+              `.cell[data-row="${rowIndex}"][data-col="${colIndex}"] .border`
             );
-            const symbol = document.querySelector(
-              `.cell[data-row="${i}"][data-col="${j}"] .symbol`
+            const symbol = getElement(
+              `.cell[data-row="${rowIndex}"][data-col="${colIndex}"] .symbol`
             );
-            cell.classList.remove("explosion");
+            cellDiv.classList.remove("explosion");
             border.style.backgroundImage = "none";
             symbol.style.backgroundImage = "none";
+
+            for (let k = rowIndex - 1; k >= 0; k--) {
+              if (data[k][colIndex].symbol !== "🔥") {
+                const container = getElement(
+                  `.cell[data-row="${k}"][data-col="${colIndex}"]`
+                );
+                container.classList.add("fall-down");
+              }
+            }
           }, 1500);
         }
-      }
-    }
-  },
-  win_symbol: (data, action_number) => {
-    if (!isMuted) winSound.play();
+      });
+    });
+  }
 
-    winDiv = document.querySelector(".floating-win");
+  win_symbol(data) {
+    this.domManager.audioManager.playSound("win");
+    const winDiv = getElement(SELECTORS.floatingWin);
     winDiv.classList.add("blinking");
     winDiv.innerHTML = `<img src='${data.symbol.symbol}' width='40px' height='40px'> x ${data.size} pays $${data.amount}`;
-    setTimeout(() => {
-      winDiv.classList.remove("blinking");
-    }, 1000);
-  },
-  tumble_table: (data, action_number) => {
-    // UpdateHandler["fill_table"](data);
-    for (let i = 0; i < data.length; i++) {
-      for (let j = 0; j < data.length; j++) {
-        const border = document.querySelector(
-          `.cell[data-row="${i}"][data-col="${j}"] .border`
+    setTimeout(() => winDiv.classList.remove("blinking"), 1000);
+  }
+
+  tumble_table(data) {
+    data.forEach((row, rowIndex) => {
+      row.forEach((cell, colIndex) => {
+        const border = getElement(
+          `.cell[data-row="${rowIndex}"][data-col="${colIndex}"] .border`
         );
-        const symbol = document.querySelector(
-          `.cell[data-row="${i}"][data-col="${j}"] .symbol`
+        const symbol = getElement(
+          `.cell[data-row="${rowIndex}"][data-col="${colIndex}"] .symbol`
         );
 
-        if (data[i][j].symbol !== " ") {
-          const borderIndex = symbols.indexOf(data[i][j].symbol);
-          border.style.backgroundImage = `url(${borders[borderIndex]})`;
-          symbol.style.backgroundImage = `url(${data[i][j].symbol})`;
+        if (cell.symbol !== " ") {
+          const borderIndex = IMAGES.symbols.indexOf(cell.symbol);
+          border.style.backgroundImage = `url(${IMAGES.borders[borderIndex]})`;
+          symbol.style.backgroundImage = `url(${cell.symbol})`;
         } else {
           border.style.backgroundImage = "none";
           symbol.style.backgroundImage = "none";
         }
-      }
-    }
+      });
+    });
+    this.domManager.audioManager.playSound("tumbling");
+    const fallingElements = getElements(".fall-down");
+    fallingElements.forEach((element) => {
+      element.classList.remove("fall-down");
+    });
+  }
 
-    if (!isMuted) tumblingSound.play();
-  },
-  prize: (data, action_number) => {
-    if (!isMuted) prizeSound.play();
-
-    prizeDiv = document.querySelector(".floating-prize");
+  prize(data) {
+    this.domManager.audioManager.playSound("prize");
+    const prizeDiv = getElement(SELECTORS.floatingPrize);
     prizeDiv.innerHTML = `Total win: $${data}`;
     prizeDiv.classList.add("blinking");
-    setTimeout(() => {
-      prizeDiv.classList.remove("blinking");
-    }, 2000);
-  },
-  cash_in: (data, action_number) => {
+    setTimeout(() => prizeDiv.classList.remove("blinking"), 2000);
+  }
+
+  cash_in(data) {
     if (data > 0) {
-      if (!isMuted) endGameSound.play();
-
-      walletBalanceDiv = document.querySelector("#walletBalance");
-      let balance = Number.parseFloat(walletBalanceDiv.innerHTML.split(" ")[1]);
-      balance += data / 100;
-      walletBalanceDiv.innerHTML = `$ ${balance.toFixed(1)}`;
+      this.domManager.audioManager.playSound("endGame");
+      const walletBalanceDiv = getElement(SELECTORS.walletBalance);
+      const balance = parseFloat(walletBalanceDiv.innerHTML.split(" ")[1]);
+      walletBalanceDiv.innerHTML = `$ ${(balance + data / 100).toFixed(1)}`;
     } else {
-      if (!isMuted) noWinSound.play();
+      this.domManager.audioManager.playSound("noWin");
     }
+    this.updateControls(false);
+  }
 
-    const bonusDiv = document.querySelector(".floating-bonus");
-    bonusDiv.innerHTML = ` Get 3 or more
-      <img src="../images/baiano.webp" width="40px" height="40px" />
-      To win free spins`;
+  bonus_rounds(data) {
+    this.domManager.updateTextContent(
+      SELECTORS.floatingBonus,
+      `Congrats you won ${data} Free Spins!`
+    );
+    this.domManager.audioManager.playSound("bonusRounds");
+    this.updateControls(true);
+  }
 
-    const betValueInput = document.getElementById("betValue");
-    const autoPlaysInput = document.getElementById("autoPlays");
-    const playButton = document.querySelector(".floating-play-button");
-    betValueInput.removeAttribute("disabled");
-    autoPlaysInput.removeAttribute("disabled");
-    playButton.removeAttribute("disabled");
-  },
-  bonus_rounds: (data, action_number) => {
-    const bonusDiv = document.querySelector(".floating-bonus");
-    bonusDiv.innerHTML = `Congrats you won ${data} Free Spins!`;
+  round_n(data) {
+    this.domManager.updateTextContent(
+      SELECTORS.floatingBonus,
+      `Free spin ${data}`
+    );
+    this.domManager.audioManager.playSound("rolling");
+    this.domManager.startSpinning();
+  }
 
-    if (!isMuted) {
-      bonusRoundsSound.play();
-    }
+  updateControls(isDisabled) {
+    getElement(SELECTORS.betValue).disabled = isDisabled;
+    getElement(SELECTORS.autoPlays).disabled = isDisabled;
+    getElement(SELECTORS.floatingPlayButton).disabled = isDisabled;
+  }
 
-    const betValueInput = document.getElementById("betValue");
-    const autoPlaysInput = document.getElementById("autoPlays");
-    const playButton = document.querySelector(".floating-play-button");
+  updateWalletBalance() {
+    const walletBalanceDiv = getElement(SELECTORS.walletBalance);
+    let balance = parseFloat(walletBalanceDiv.innerHTML.split(" ")[1]);
+    balance -= parseFloat(getElement(SELECTORS.betValue).value);
 
-    betValueInput.setAttribute("disabled", "true");
-    autoPlaysInput.setAttribute("disabled", "true");
-    playButton.setAttribute("disabled", "true");
-  },
-  round_n: (data, action_number) => {
-    const bonusDiv = document.querySelector(".floating-bonus");
-    bonusDiv.innerHTML = `Free spin ${data}`;
+    this.domManager.updateTextContent(
+      SELECTORS.walletBalance,
+      `$ ${balance.toFixed(2)}`
+    );
+  }
 
-    if (!isMuted) {
-      rollingSound.play();
-    }
-    startSpinning();
-  },
-};
+  updateAutoPlaysCount() {
+    this.totalPlays++;
+    this.domManager.updateTextContent(
+      SELECTORS.autoPlaysCount,
+      `${this.totalPlays}/${getElement(SELECTORS.autoPlays).value}`
+    );
+  }
+}
 
-// Initial render of the table
-renderTable();
+// Initialize Game
+const gameManager = new GameManager();
