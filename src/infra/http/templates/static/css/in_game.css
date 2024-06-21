@@ -244,6 +244,18 @@ body {
     100% { transform: translateY(-500%); }
 }
 
+.fall-down {
+    animation: fall-down 18s infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes fall-down {
+    0% { transform: translateY(0%); }
+    100% { transform: translateY(100%); }
+}
+
 .explosion {
     position: relative;
     width: 50px;
