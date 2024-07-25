@@ -130,6 +130,20 @@ class DOMManager {
     getElement(SELECTORS.menuButton).addEventListener("click", () => {
       window.location.href = "/menu?token=" + this.gameManager.token;
     });
+    getElement("body").addEventListener("keyup", (e) => {
+      const isAlreadyPlaying =
+        getElement(SELECTORS.floatingPlayButton).getAttribute("disabled") !==
+        null;
+
+      if (
+        (e.key == " " || e.code == "Space" || e.keyCode == 32) &&
+        !isAlreadyPlaying
+      ) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        this.gameManager.play();
+      }
+    });
 
     this.updateElementAttribute(SELECTORS.betValue, "onchange", () => {
       this.updateTextContent(
@@ -276,6 +290,7 @@ class GameManager {
   }
 
   play() {
+    this.updateHandler.totalPlays = 0;
     const betValue = parseInt(getElement(SELECTORS.betValue).value, 10) * 100;
     this.autoPlays = parseInt(getElement(SELECTORS.autoPlays).value, 10);
     if (betValue === 0 || this.autoPlays === 0) {
@@ -326,7 +341,6 @@ class UpdateHandler {
 
   fill_table(data, actionNumber) {
     if (actionNumber === 0) {
-      this.totalPlays = 0;
       this.domManager.startSpinning();
       this.updateControls(true);
       this.updateWalletBalance();
